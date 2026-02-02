@@ -12,9 +12,11 @@ namespace C__Server_Class.Pages
             _logger = logger;
         }
 
+        public string LangDesc { get; set; }
+
         public void OnGet()
         {
-
+            LangDesc = "123";
         }
     }
 }

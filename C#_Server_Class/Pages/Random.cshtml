@@ -1,0 +1,20 @@
+﻿@page
+@model C__Server_Class.Pages.RandomModel
+@{
+	ViewData["title"] = "Randomizer";
+
+}
+<div class="text-center">
+
+<h1>Random Number Generator</h1>
+<p>@Model.RandomNumber</p>
+	<div id="dice">@Html.Raw(Model.Dice)</div>
+</div>
+
+<script>
+    const result = "@Model.Result";
+    const diceNumber = document.querySelector(".dc_dice_a");
+    if (diceNumber && diceNumber.innerHTML.trim() === "") {
+        diceNumber.innerHTML = result;
+    }
+</script>
