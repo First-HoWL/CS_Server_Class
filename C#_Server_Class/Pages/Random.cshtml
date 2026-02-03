@@ -5,16 +5,31 @@
 
 }
 <div class="text-center">
-
+@Html.AntiForgeryToken()
 <h1>Random Number Generator</h1>
-<p>@Model.RandomNumber</p>
-	<div id="dice">@Html.Raw(Model.Dice)</div>
+<p id = "randomNumber">@Model.RandomNumber</p>
+<button id="btnGenRnd">Generate</button>
 </div>
 
-<script>
-    const result = "@Model.Result";
-    const diceNumber = document.querySelector(".dc_dice_a");
-    if (diceNumber && diceNumber.innerHTML.trim() === "") {
-        diceNumber.innerHTML = result;
-    }
-</script>
+@section Scripts{
+	<script>
+		const token = document
+		.querySelector("input[name=__RequestVerificationToken]").value
+		document.getElementById("btnGenRnd")
+		.addEventListener("click", ()=>{
+			fetch("", {
+				headers: {
+					"RequestVerificationToken": token
+				},
+				method: "POST"
+			})
+			.then(response => response.json())
+			.then(
+				data =>{
+					document.getElementById("randomNumber")
+					.textContent = data.number
+				}
+			)
+		})
+	</script>
+}

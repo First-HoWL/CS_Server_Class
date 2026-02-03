@@ -20,34 +20,3 @@ html {
 body {
   margin-bottom: 60px;
 }
-#dice {
-    margin-top: 40px;
-    font-family: Arial, sans-serif;
-}
-
-/* число */
-.dc_dice_a {
-    display: inline-block;
-    background: #f5f5f5;
-    border: 2px solid #555;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 26px;
-    font-weight: bold;
-    color: #222;
-    margin-right: 6px;
-    min-width: 40px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-/* тип кубика */
-.dc_dice_d {
-    display: inline-block;
-    background: #2c2c2c;
-    color: white;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 20px;
-    border: 2px solid #444;
-}
