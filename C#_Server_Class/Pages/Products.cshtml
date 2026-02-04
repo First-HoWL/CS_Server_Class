@@ -1,0 +1,99 @@
+﻿@page
+@using C__Server_Class.Models
+@model C__Server_Class.Pages.ProductsModel
+@{
+    ViewData["Title"] = "Товари";
+}
+<form action ="?handler=Add" method="post">
+    @Html.AntiForgeryToken()
+    <input name="name"type="text" asp-for="CurrentProduct.Name" />
+    <input name="description"type="text" asp-for="CurrentProduct.Description"
+           placeholder="Опис" />
+    <input name="price"type="number" asp-for="CurrentProduct.Price" />
+    <button type="submit" class="btn btn-success">
+        Додати
+    </button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+            <th scope="col">Buttons</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Product product in Model.Products)
+        {
+        <tr>
+            <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.Price</td>
+                <td>
+                    <button class="btn btn-warning edit-product"
+                            data-id="@product.Id">
+                        Edit
+                    </button>
+                    <button class="btn btn-danger delete-product"
+                            data-id="@product.Id">
+                        Видалити
+                    </button>
+                </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        const token = document.querySelector(
+            'input[name="__RequestVerificationToken"]'
+        ).value;
+
+        document.querySelectorAll("button.edit-product")
+            .forEach(button => {
+                button.addEventListener("click", ()=>{
+                    const productId = button.getAttribute("data-id");
+                    let form = document.querySelector("form");
+                    fetch(`?handler=Edit&id=${productId}`,{
+                        method: "POST",
+                        headers: {
+                            "RequestVerificationToken": token,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            Name: form.querySelector("input[name=name]").value,
+                            Description: form.querySelector("input[name=description]").value,
+                            Price: form.querySelector("input[name=price]").value
+                        })
+                     }).then(() => {
+                            location.replace("/Products");
+                        });
+                        
+                    
+                })
+            });
+
+
+        document.querySelectorAll("button.delete-product")
+            .forEach(button => {
+                button.addEventListener("click", ()=>{
+                    const productId = button.getAttribute("data-id");
+                    fetch(`?handler=Delete&id=${productId}`,{
+                        method: "POST",
+                        headers: {
+                            "RequestVerificationToken": token
+                        }
+                    }).then(res => res.json())
+                    .then((data)=>{ if(data.success){ location.replace("/Products");} else{
+                        console.error(data.error)
+                    }})
+                    
+                })
+            });
+    </script>
+}
