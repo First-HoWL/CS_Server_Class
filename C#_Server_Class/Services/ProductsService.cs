@@ -1,6 +1,5 @@
 ﻿using C__Server_Class.Models;
 using System.Xml.Linq;
-using C__Server_Class.Models;
 
 namespace C__Server_Class.Services
 {

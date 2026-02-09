@@ -1,0 +1,136 @@
+﻿@page
+@using C__Server_Class.Models
+@model C__Server_Class.Pages.TrainStaffModel
+@{
+    ViewData["Title"] = "Employees";
+}
+<form action="?handler=Add" method="post">
+    @Html.AntiForgeryToken()
+    <input name="Name" type="text" asp-for="CurrentEmployee.Name" placeholder="Name" />
+    <input name="Surname" placeholder="Surname" type="text" asp-for="CurrentEmployee.Surname" />
+    <input name="Lastname" placeholder="Lastname" type="text" asp-for="CurrentEmployee.Lastname" />
+    <input name="Brigade" placeholder="Brigade" type="text" asp-for="CurrentEmployee.Brigade" />
+    <select name="Gender" placeholder="Gender" asp-for="CurrentEmployee.Gender">
+        <option>male</option>
+        <option>female</option>
+        <option>none</option>
+    </select>
+    <input name="Height" placeholder="Height" type="number" asp-for="CurrentEmployee.Height" />
+    <input name="Position" placeholder="Position" type="text" asp-for="CurrentEmployee.Position" />
+    <input name="Department" placeholder="Department" type="text" asp-for="CurrentEmployee.Department" />
+    <input name="Salary" placeholder="Salary" type="number" asp-for="CurrentEmployee.Salary" />
+    <input name="Children" placeholder="Children" type="number" asp-for="CurrentEmployee.Children" />
+    <input name="Birthday" placeholder="Birthday" type="date" asp-for="CurrentEmployee.Birthday" />
+    <input name="Hired" placeholder="Hired" type="date" asp-for="CurrentEmployee.Hired" />
+    
+    <button type="submit" class="btn btn-success">
+        Додати
+    </button>
+</form>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Brigade</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Height</th>
+            <th scope="col">Position</th>
+            <th scope="col">Department</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Hired</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Children</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (TrainEmployee Employee in Model.TrainEmployees)
+        {
+            <tr>
+                <td>@Employee.Id</td>
+                <td style="max-width: 200px;overflow-wrap: break-word;">@Employee.Name @Employee.Surname @Employee.Lastname</td>
+                <td>@Employee.Brigade</td>
+                <td>@Employee.Gender</td>
+                <td>@Employee.Height</td>
+                <td>@Employee.Position</td>
+                <td>@Employee.Department</td>
+                <td>@Employee.Birthday.ToShortDateString()</td>
+                <td>@Employee.Hired.ToShortDateString()</td>
+                <td>@Employee.Salary</td>
+                <td>@(Employee.Children == 0 ? "none" : @Employee.Children)</td>
+                <td>
+                    <button class="btn btn-warning update-employee"
+                            data-id="@Employee.Id">
+                        Edit
+                    </button>
+                    <button class="btn btn-danger delete-employee"
+                            data-id="@Employee.Id">
+                        Видалити
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        const token = document.querySelector(
+            'input[name="__RequestVerificationToken"]'
+        ).value;
+
+        document.querySelectorAll("button.update-employee")
+            .forEach(button => {
+                button.addEventListener("click", ()=>{
+                    const employeeId = button.getAttribute("data-id");
+                    let form = document.querySelector("form");
+                    fetch(`?handler=Update&id=${employeeId}`,{
+                        method: "POST",
+                        headers: {
+                            "RequestVerificationToken": token,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            Name: form.querySelector("input[name=Name]").value,
+                            Surname: form.querySelector("input[name=Surname]").value,
+                            Lastname: form.querySelector("input[name=Lastname]").value,
+                            Brigade: form.querySelector("input[name=Brigade]").value,
+                            Gender: form.querySelector("select[name=Gender]").value,
+                            Height: form.querySelector("input[name=Height]").value,
+                            Position: form.querySelector("input[name=Position]").value,
+                            Department: form.querySelector("input[name=Department]").value,
+                            Birthday: form.querySelector("input[name=Birthday]").value,
+                            Hired: form.querySelector("input[name=Hired]").value,
+                            Salary: form.querySelector("input[name=Salary]").value,
+                            Children: form.querySelector("input[name=Children]").value,
+                        })
+                     }).then(res => res.json())
+                        .then((data)=>{ if(data.success){ location.replace("/TrainStaff");} else{
+                            console.error(data.error)
+                        }})
+
+
+                })
+            });
+
+
+        document.querySelectorAll("button.delete-employee")
+            .forEach(button => {
+                button.addEventListener("click", ()=>{
+                    if(confirm("Are you sure?")){
+                        const employeeId = button.getAttribute("data-id");
+                        fetch(`?handler=Delete&id=${employeeId}`,{
+                            method: "POST",
+                            headers: {
+                                "RequestVerificationToken": token
+                            }
+                        }).then(res => res.json())
+                        .then((data)=>{ if(data.success){ location.replace("/TrainStaff");} else{
+                            console.error(data.error)
+                        }})
+                    }
+                })
+            });
+    </script>
+}
