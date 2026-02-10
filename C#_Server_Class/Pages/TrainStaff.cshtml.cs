@@ -58,7 +58,7 @@ namespace C__Server_Class.Pages
             return errors;
         }
 
-        public IActionResult OnPostAdd()
+        public /*IActionResult*/ void OnPostAdd()
         {
             int result = -1;
             List<string> errors = Validation(CurrentEmployee);
@@ -66,11 +66,11 @@ namespace C__Server_Class.Pages
             {
                 result = _TrainEmployees.Add(CurrentEmployee);
             }
-            return new JsonResult(new
-            {
-                error = errors,
-                success = result != -1 ? true : false
-            });
+            //return new JsonResult(new
+            //{
+            //    error = errors,
+            //    success = result != -1 ? true : false
+            //});
         }
         public async Task<IActionResult> OnPostUpdate(int id)
         {

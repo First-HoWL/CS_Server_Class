@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/shop/{handler?}/{id?}"
 @using C__Server_Class.Models
 @model C__Server_Class.Pages.ProductsModel
 @{
@@ -59,7 +59,7 @@
                 button.addEventListener("click", ()=>{
                     const productId = button.getAttribute("data-id");
                     let form = document.querySelector("form");
-                    fetch(`?handler=Edit&id=${productId}`,{
+                    fetch(`shop/Edit/${productId}`,{
                         method: "POST",
                         headers: {
                             "RequestVerificationToken": token,
@@ -71,7 +71,7 @@
                             Price: form.querySelector("input[name=price]").value
                         })
                      }).then(() => {
-                            location.replace("/Products");
+                            location.replace("/shop");
                         });
                         
                     
@@ -83,13 +83,13 @@
             .forEach(button => {
                 button.addEventListener("click", ()=>{
                     const productId = button.getAttribute("data-id");
-                    fetch(`?handler=Delete&id=${productId}`,{
+                    fetch(`shop/Delete/${productId}`,{
                         method: "POST",
                         headers: {
                             "RequestVerificationToken": token
                         }
                     }).then(res => res.json())
-                    .then((data)=>{ if(data.success){ location.replace("/Products");} else{
+                    .then((data)=>{ if(data.success){ location.replace("/shop");} else{
                         console.error(data.error)
                     }})
                     
