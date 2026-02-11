@@ -3,7 +3,12 @@ using C__Server_Class.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(
+    options =>
+    {
+        options.Conventions.AddPageRoute("/Posts/post", "/news");
+        //options.Conventions.AddPageRoute("/Products", "/shop");
+    });
 builder.Services.AddSingleton<ProductsService>();
 builder.Services.AddSingleton<EmployeeService>();
 builder.Services.AddSingleton<SushiService>();
