@@ -1,0 +1,91 @@
+﻿@page
+@using C__Server_Class.Models
+@model C__Server_Class.Pages.SushiStoreModel
+@{
+}
+
+@Html.AntiForgeryToken()
+
+<header class="d-flex align-items-center " style="justify-content: space-between;">
+	<div>Logo</div>
+	<div>
+		<button class="bucket">Bucket</button>
+	</div>
+	
+</header>
+
+<div>
+	<h2>Sushi</h2>
+	<div class="shop">
+		@foreach (Sushi sushi in Model.Sushies)
+		{
+			<div class="card">
+				<img src="@sushi.Img" />
+				<h3>@sushi.Name</h3>
+				<p>@sushi.Description</p>
+				<div class="d-flex flex-md-column justify-content-end">
+				<div class="d-flex align-items-center" style="justify-content: space-between;">
+					<div>@sushi.Price</div>
+					<button class="addToBucket" data-id="@sushi.Id">Add to Bucket</button>
+				</div>
+				</div>
+				
+			</div>
+		}
+	</div>
+</div>
+
+
+@section Scripts {
+<script>
+
+
+	const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+	fetch(`?handler=BucketId`,{
+		method: "Get",
+		headers: {
+			"RequestVerificationToken": token,
+			"Content-Type": "application/json"
+		},
+		}).then(res => res.json())
+		.then((data)=>{  localStorage.setItem("PublicId", data.publicId)  })
+
+
+        document.querySelectorAll("button.addToBucket")
+            .forEach(button => {
+                button.addEventListener("click", ()=>{
+                    const SushiId = button.getAttribute("data-id");
+                    fetch(`?handler=Update&publicId=${localStorage.getItem("PublicId")}`,{
+                        method: "POST",
+                        headers: {
+                            "RequestVerificationToken": token,
+                            "Content-Type": "application/json"
+                        },
+							body: JSON.stringify(SushiId) 
+                        }).then(res => res.json())
+							.then((data)=>{ console.log(data) })
+
+
+                })
+            });
+        document.querySelectorAll("button.bucket")
+            .forEach(button => {
+                button.addEventListener("click", ()=>{
+                    fetch(`?handler=Bucket&publicId=${localStorage.getItem("PublicId")}`,{
+                    method: "GET",
+                    headers: {
+                        "RequestVerificationToken": token,
+                        "Content-Type": "application/json"
+                    },
+                    }).then(res => res.json())
+                        .then((data)=>{ console.log(data) })
+
+
+                })
+            });
+
+
+
+</script>
+}

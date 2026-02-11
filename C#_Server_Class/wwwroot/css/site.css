@@ -29,3 +29,36 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+div.shop {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.card {
+    width: 250px;
+    height: 400px;
+    display: flex;
+    background-color: lightgrey;
+    flex-direction: column;
+    border-radius: 20px;
+    margin: 10px 10px 0px 10px;
+}
+div.card > img {
+    width: 250px;
+    max-height: 200px;
+    border-radius: 20px 20px 0 0;
+    object-fit: cover;
+}
+
+div.card > p {
+    padding: 10px 10px 0 10px;
+    margin-bottom: 0;
+    overflow: auto;
+    overflow-wrap: break-word;
+}
+
+div.card > h3 {
+    padding-left: 10px;
+    margin-bottom: 0;
+}

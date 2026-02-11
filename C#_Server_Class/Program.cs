@@ -6,6 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ProductsService>();
 builder.Services.AddSingleton<EmployeeService>();
+builder.Services.AddSingleton<SushiService>();
+builder.Services.AddSingleton<SushiSetService>();
+builder.Services.AddSingleton<BucketService>();
+builder.Services.AddSingleton<OrderService>();
 
 var app = builder.Build();
 
